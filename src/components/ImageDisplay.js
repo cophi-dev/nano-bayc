@@ -122,7 +122,7 @@ const ApeImage = styled.img`
   @media (max-width: 768px) {
     width: 140px;
     height: 140px;
-    bottom: 60px;
+    bottom: 0;
   }
 `;
 
@@ -141,6 +141,7 @@ const Credits = styled.div`
   background: rgba(0, 0, 0, 0.5);
   padding: 8px 12px;
   border-radius: 8px;
+  pointer-events: none;
 
   @media (max-width: 768px) {
     font-size: 11px;
@@ -153,6 +154,7 @@ const Credits = styled.div`
     color: white;
     text-decoration: none;
     transition: opacity 0.2s;
+    pointer-events: auto;
     
     &:hover {
       opacity: 0.8;
