@@ -7,18 +7,22 @@ const CONTRACT_ADDRESS = '0xfAa0e99EF34Eae8b288CFEeAEa4BF4f5B5f2eaE7';
 
 const Container = styled.div`
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   background-image: url(${props => props.$bgImage});
   background-size: cover;
   background-position: center;
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   
   @media (max-width: 768px) {
-    padding-bottom: 160px;
+    padding-bottom: 0;
+    background-size: 100% 100%;
   }
 `;
 
@@ -116,10 +120,9 @@ const ApeImage = styled.img`
   z-index: 5;
   
   @media (max-width: 768px) {
-    width: 180px;
-    height: 180px;
-    position: absolute;
-    bottom: 0;
+    width: 140px;
+    height: 140px;
+    bottom: 60px;
   }
 `;
 
@@ -140,15 +143,10 @@ const Credits = styled.div`
   border-radius: 8px;
 
   @media (max-width: 768px) {
-    position: absolute;
-    font-size: 12px;
+    font-size: 11px;
     bottom: 20px;
-    left: 20px;
-    right: auto;
-    transform: none;
-    text-align: left;
-    width: auto;
-    backdrop-filter: blur(5px);
+    left: 10px;
+    padding: 6px 10px;
   }
 
   a {
@@ -172,7 +170,7 @@ const MintStatus = styled.div`
   font-weight: 600;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   letter-spacing: 0.3px;
-  background: ${props => props.$isMinted ? 'rgba(46, 204, 113, 0.9)' : 'rgba(231, 76, 60, 0.95)'};
+  background: ${props => props.$isMinted ? 'rgba(46, 204, 113, 0.95)' : 'rgba(231, 76, 60, 0.95)'};
   color: white;
   backdrop-filter: blur(5px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -185,25 +183,15 @@ const MintStatus = styled.div`
   z-index: 10;
   
   @media (max-width: 768px) {
-    position: absolute;
+    font-size: 12px;
+    padding: 8px 16px;
+    right: 10px;
     bottom: 20px;
-    right: 20px;
-    left: auto;
-    transform: none;
-    font-size: 14px;
-    padding: 12px 24px;
-    white-space: nowrap;
-    width: auto;
-    background: ${props => props.$isMinted ? 'rgba(46, 204, 113, 0.95)' : 'rgba(231, 76, 60, 0.95)'};
   }
   
   &:hover {
     transform: ${props => props.$isMinted ? 'none' : 'translateY(-2px)'};
     box-shadow: ${props => props.$isMinted ? '0 4px 12px rgba(0, 0, 0, 0.15)' : '0 6px 16px rgba(0, 0, 0, 0.2)'};
-    
-    @media (max-width: 768px) {
-      transform: translateX(-50%) ${props => props.$isMinted ? '' : 'translateY(-2px)'};
-    }
   }
 `;
 
