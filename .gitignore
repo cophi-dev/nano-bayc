@@ -1,5 +1,12 @@
+# Dependencies
 node_modules
 .env
+
+# Build files
 build
 dist
 .DS_Store
+
+# Data folder
+data/
+/data
