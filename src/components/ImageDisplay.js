@@ -7,14 +7,19 @@ const CONTRACT_ADDRESS = '0xfAa0e99EF34Eae8b288CFEeAEa4BF4f5B5f2eaE7';
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-image: url(${props => props.$bgImage});
   background-size: cover;
   background-position: center;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
+  
+  @media (max-width: 768px) {
+    padding-bottom: 160px;
+  }
 `;
 
 const TopControls = styled.div`
@@ -28,6 +33,16 @@ const TopControls = styled.div`
   background: rgba(255, 255, 255, 0.8);
   padding: 5px 15px;
   border-radius: 20px;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 90%;
+    max-width: 300px;
+    gap: 8px;
+    padding: 10px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -38,6 +53,11 @@ const SearchInput = styled.input`
   background: transparent;
   font-size: 14px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 16px;
+  }
   
   &:focus {
     outline: none;
@@ -50,6 +70,12 @@ const Select = styled.select`
   border-radius: 10px;
   background: transparent;
   font-size: 14px;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+  }
   
   &:focus {
     outline: none;
@@ -66,6 +92,12 @@ const SaveButton = styled.button`
   cursor: pointer;
   transition: background 0.2s;
   
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
   &:hover {
     background: #2980b9;
   }
@@ -75,16 +107,63 @@ const ApeImage = styled.img`
   width: 250px;
   height: 250px;
   object-fit: contain;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+  z-index: 5;
+  
+  @media (max-width: 768px) {
+    width: 180px;
+    height: 180px;
+    position: absolute;
+    bottom: 0;
+  }
+`;
+
+const Credits = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    position: absolute;
+    font-size: 12px;
+    bottom: 20px;
+    left: 20px;
+    right: auto;
+    transform: none;
+    text-align: left;
+    width: auto;
+    backdrop-filter: blur(5px);
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `;
 
 const MintStatus = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 20px;
   padding: 12px 20px;
@@ -103,32 +182,27 @@ const MintStatus = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  z-index: 10;
+  
+  @media (max-width: 768px) {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    left: auto;
+    transform: none;
+    font-size: 14px;
+    padding: 12px 24px;
+    white-space: nowrap;
+    width: auto;
+    background: ${props => props.$isMinted ? 'rgba(46, 204, 113, 0.95)' : 'rgba(231, 76, 60, 0.95)'};
+  }
   
   &:hover {
     transform: ${props => props.$isMinted ? 'none' : 'translateY(-2px)'};
     box-shadow: ${props => props.$isMinted ? '0 4px 12px rgba(0, 0, 0, 0.15)' : '0 6px 16px rgba(0, 0, 0, 0.2)'};
-  }
-`;
-
-const Credits = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: white;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  a {
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.2s;
     
-    &:hover {
-      opacity: 0.8;
+    @media (max-width: 768px) {
+      transform: translateX(-50%) ${props => props.$isMinted ? '' : 'translateY(-2px)'};
     }
   }
 `;
@@ -176,7 +250,7 @@ const ImageDisplay = ({ tokenId: initialTokenId }) => {
   useEffect(() => {
     fetchApeImage();
     checkMintStatus(tokenId);
-  }, [tokenId]);
+  }, [tokenId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -298,4 +372,4 @@ const ImageDisplay = ({ tokenId: initialTokenId }) => {
   );
 };
 
-export default ImageDisplay; 
+export default ImageDisplay;
